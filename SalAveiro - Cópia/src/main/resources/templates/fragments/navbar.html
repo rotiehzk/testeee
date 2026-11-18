@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark app-navbar" th:fragment="navbar(activePage)">
+    <div class="container">
+        <a class="navbar-brand fw-semibold" th:href="@{/}">2Fit Gym</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="mainNavbar">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" th:classappend="${activePage == 'home'} ? ' active'" th:href="@{/alunos}">Inicio</a>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="nav-link" th:classappend="${activePage == 'scan'} ? ' active'" th:href="@{/alunos/scan}">Scan QR</a>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="nav-link" th:classappend="${activePage == 'presencas'} ? ' active'" th:href="@{/presencas}">Presenças</a>
+                </li>
+               
+                <li class="nav-item" th:if="${session.authenticated}">
+                    <a class="nav-link" th:href="@{/logout}">Logout</a>
+                </li>
+                <li class="nav-item" th:unless="${session.authenticated}">
+                    <a class="nav-link" th:href="@{/login}">Login</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+</body>
+</html>

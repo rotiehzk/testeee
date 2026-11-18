@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-PT" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Utilizadores | SalAveiro</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="layout">
+    <aside class="sidebar">
+        <p class="marca">Sal<span>Aveiro</span></p>
+        <nav aria-label="Navegação">
+            <a class="item-menu" th:href="@{/dashboard}">Visão geral</a>
+            <a class="item-menu ativo" th:href="@{/utilizadores}">Utilizadores e perfis</a>
+        </nav>
+    </aside>
+    <main>
+        <header class="cabecalho">
+            <h1>Utilizadores</h1>
+            <a th:if="${utilizadores != null}" th:href="@{/utilizadores/novo}">Criar utilizador</a>
+            <a th:unless="${utilizadores != null}" th:href="@{/utilizadores}">Voltar à lista</a>
+        </header>
+
+        <section class="painel" th:if="${utilizadores != null}">
+            <form method="get" th:action="@{/utilizadores}">
+                <label for="pesquisa">Nome, email ou perfil</label>
+                <input id="pesquisa" type="search" name="q" th:value="${pesquisa}">
+                <button type="submit">Pesquisar</button>
+            </form>
+            <table class="atividade">
+                <thead><tr><th>Nome</th><th>Email</th><th>Perfil</th><th>Estado</th><th>Ações</th></tr></thead>
+                <tbody>
+                    <tr th:each="u : ${utilizadores}">
+                        <td th:text="${u.nome}"></td>
+                        <td th:text="${u.email}"></td>
+                        <td th:text="${u.perfil ?: '—'}"></td>
+                        <td th:text="${u.ativo ? 'Ativo' : 'Inativo'}"></td>
+                        <td><a th:href="@{/utilizadores/{id}(id=${u.id_utilizador})}">Consultar</a></td>
+                    </tr>
+                    <tr th:if="${utilizadores.isEmpty()}"><td colspan="5">Sem resultados.</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="painel" th:if="${utilizador != null}">
+            <h2 th:text="${utilizador.nome}"></h2>
+            <dl>
+                <dt>Email</dt><dd th:text="${utilizador.email}"></dd>
+                <dt>Perfil</dt><dd th:text="${utilizador.perfil ?: '—'}"></dd>
+                <dt>Estado</dt><dd th:text="${utilizador.ativo ? 'Ativo' : 'Inativo'}"></dd>
+            </dl>
+            <a th:href="@{/utilizadores/{id}/editar(id=${utilizador.id_utilizador})}">Editar</a>
+            <form th:if="${utilizador.ativo}" method="post"
+                  th:action="@{/utilizadores/{id}/desativar(id=${utilizador.id_utilizador})}">
+                <button type="submit">Desativar</button>
+            </form>
+            <form th:unless="${utilizador.ativo}" method="post"
+                  th:action="@{/utilizadores/{id}/reativar(id=${utilizador.id_utilizador})}">
+                <button type="submit">Reativar</button>
+            </form>
+        </section>
+
+        <section class="painel" th:if="${form != null}">
+            <h2 th:text="${id == null ? 'Criar utilizador' : 'Editar utilizador'}"></h2>
+            <form method="post" th:object="${form}"
+                  th:action="${id == null} ? @{/utilizadores} : @{/utilizadores/{id}/editar(id=${id})}">
+                <ul th:if="${#fields.hasAnyErrors()}" role="alert">
+                    <li th:each="erro : ${#fields.allErrors()}" th:text="${erro}"></li>
+                </ul>
+                <p><label for="email">Email</label>
+                    <input id="email" type="email" th:field="*{email}" required></p>
+                <p><label for="trabalhadorId">Trabalhador</label>
+                    <select id="trabalhadorId" th:field="*{trabalhadorId}" required>
+                        <option value="">Selecionar</option>
+                        <option th:each="t : ${trabalhadores}" th:value="${t.id}" th:text="${t.nome}"></option>
+                    </select></p>
+                <p><label for="perfilId">Perfil</label>
+                    <select id="perfilId" th:field="*{perfilId}" required>
+                        <option value="">Selecionar</option>
+                        <option th:each="p : ${perfis}" th:value="${p.id}" th:text="${p.nome}"></option>
+                    </select></p>
+                <button type="submit">Guardar</button>
+            </form>
+        </section>
+    </main>
+</div>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head(${titulo})"></head>
+<body>
+    <main class="container py-4" data-page="login">
+        <section class="app-hero mb-4">
+            <div class="app-hero-copy">
+                <span class="badge text-bg-light mb-3">Autenticação</span>
+                <h1 class="display-6 mb-2">Login</h1>
+                <p class="text-secondary mb-0">
+                    Insira as suas credenciais para aceder ao sistema de gestão.
+                </p>
+            </div>
+        </section>
+
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-5">
+                <div id="feedback" class="mb-3"></div>
+
+                <div class="card shadow-sm border-0">
+                    <div class="card-header bg-white border-0 pt-4 px-4">
+                        <h2 class="h4 mb-1" style="color: #000;">Credenciais</h2>
+                        <p class="mb-0" style="color: #000;">Inicie sessão para continuar</p>
+                    </div>
+                    <div class="card-body p-4">
+                        <div th:if="${error}" class="alert alert-danger" role="alert">
+                            <span th:text="${error}"></span>
+                        </div>
+                        <div th:if="${param.logout}" class="alert alert-success" role="alert">
+                            Sessão encerrada com sucesso.
+                        </div>
+
+                        <form th:action="@{/login}" method="post">
+                            <div class="mb-3">
+                                <label for="username" class="form-label">Utilizador</label>
+                                <input type="text" class="form-control" id="username" name="username" required autofocus>
+                            </div>
+                            <div class="mb-4">
+                                <label for="password" class="form-label">Password</label>
+                                <input type="password" class="form-control" id="password" name="password" required>
+                            </div>
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary btn-lg">Entrar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <div class="card shadow-sm border-0 mt-3">
+                    <div class="card-body py-3">
+                        <p class="text-secondary mb-0 text-center">
+                            <small>Use a chave de administrador como password</small>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div th:replace="fragments/scripts :: scripts(null)"></div>
+</body>
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pt-PT" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${titulo}">Dashboard</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+   
+    <div class="layout">
+        <aside class="sidebar">
+            <p class="marca">Sal<span>Aveiro</span></p>
+            <p class="legenda">Gestão de salinas</p>
+            <nav aria-label="Menu de navegação">
+                <p class="grupo-menu">Principal</p>
+                <ul>
+                    <li><a class="item-menu" th:href="@{/dashboard}">Visão geral</a></li>
+                    <li><span class="item-menu">Salinas e tanques</span></li>
+                    <li><span class="item-menu">Colheitas e produção</span></li>
+                    <li><span class="item-menu">Produtos e stock</span></li>
+                    <li><span class="item-menu">Clientes</span></li>
+                    <li><span class="item-menu">Encomendas</span></li>
+                    <li><span class="item-menu">Relatórios</span></li>
+                </ul>
+                <p class="grupo-menu">Administração</p>
+                <ul>
+                    <li><a class="item-menu" th:href="@{/utilizadores}">Utilizadores e perfis</a></li>
+                    <li><span class="item-menu">Trabalhadores e funções</span></li>
+                </ul>
+                <p class="grupo-menu">Conta</p>
+                <ul>
+                    <li><span class="item-menu">A minha conta</span></li>
+                    <li><a class="item-menu" th:href="@{/logout}">Terminar sessão</a></li>
+                </ul>
+            </nav>
+            <div class="conta-lateral">
+                <p>Perfil: <span th:text="${perfilUtilizador}"></span></p>
+            </div>
+        </aside>
+
+        <main>
+            <header class="topo">
+                <span class="caminho">Área reservada / Visão geral</span>
+                <div class="utilizador">
+                    <div><strong class="nome" th:text="${nomeUtilizador}"></strong><span class="perfil" th:text="${perfilUtilizador}"></span></div>
+                </div>
+            </header>
+
+            <div class="cabecalho">
+                <div>
+                    <p class="etiqueta">O seu espaço de gestão</p>
+                    <h1 th:text="${titulo}">Dashboard</h1>
+                    <p class="subtitulo">Acompanhe a produção, as encomendas e o dia a dia das salinas.</p>
+                </div>
+            </div>
+
+            <section class="resumo" aria-label="Resumo dos registos">
+                <article class="cartao"><h2>Salinas registadas</h2><strong class="numero" th:text="${resumo.salinas}"></strong></article>
+                <article class="cartao"><h2>Trabalhadores</h2><strong class="numero" th:text="${resumo.trabalhadores}"></strong></article>
+                <article class="cartao"><h2>Colheitas</h2><strong class="numero" th:text="${resumo.colheitas}"></strong></article>
+                <article class="cartao"><h2>Total produzido</h2><strong class="numero"><span th:text="${resumo.totalProduzido}"></span> <small>kg</small></strong></article>
+                <article class="cartao"><h2>Produtos</h2><strong class="numero" th:text="${resumo.produtos}"></strong></article>
+                <article class="cartao"><h2>Clientes</h2><strong class="numero" th:text="${resumo.clientes}"></strong></article>
+                <article class="cartao"><h2>Encomendas</h2><strong class="numero" th:text="${resumo.encomendas}"></strong></article>
+            </section>
+
+            <div class="colunas">
+                <section class="painel" aria-labelledby="funcionalidades">
+                    <div class="titulo-painel"><h2 id="funcionalidades">Áreas de gestão</h2></div>
+                    <div class="atalhos">
+                        <div class="atalho"><strong>Salinas e tanques</strong><span>Gerir salinas e estados dos tanques</span></div>
+                        <div class="atalho"><strong>Colheitas e produção</strong><span>Registar e acompanhar colheitas</span></div>
+                        <div class="atalho"><strong>Produtos e stock</strong><span>Gerir catálogo, preços e existências</span></div>
+                        <div class="atalho"><strong>Clientes e encomendas</strong><span>Gerir clientes e acompanhar pedidos</span></div>
+                        <div class="atalho"><strong>Utilizadores e trabalhadores</strong><span>Gerir perfis, trabalhadores e funções</span></div>
+                        <div class="atalho"><strong>Relatórios</strong><span>Consultar produção e vendas</span></div>
+                    </div>
+                </section>
+
+                <section class="painel meteorologia" aria-labelledby="api">
+                    <div class="titulo-painel"><h2 id="api">Meteorologia</h2><span class="selo">API externa</span></div>
+                    <p class="local">Aveiro, Portugal · Dados de exemplo</p>
+                    <div class="tempo"><span class="sol" aria-hidden="true">☀</span><div class="temperatura">22 °C<span class="condicao">Céu limpo</span></div></div>
+                    <dl class="dados-tempo">
+                        <div><dt>Humidade</dt><dd>64 %</dd></div>
+                        <div><dt>Vento</dt><dd>14 km/h</dd></div>
+                        <div><dt>Precipitação</dt><dd>0 mm</dd></div>
+                        <div><dt>Direção do vento</dt><dd>Noroeste</dd></div>
+                    </dl>
+                    <p class="api-nota">Área reservada à apresentação de dados de uma API meteorológica externa.<br>Sem ligação à API neste protótipo. Valores fictícios, sem atualização em tempo real.</p>
+                </section>
+            </div>
+
+            <section class="painel atividade" aria-labelledby="atividade">
+                <div class="titulo-painel"><h2 id="atividade">Últimas colheitas</h2></div>
+                <table>
+                    <thead><tr><th scope="col">Data</th><th scope="col">Salina</th><th scope="col">Tanque</th><th scope="col">Quantidade</th><th scope="col">Trabalhador</th></tr></thead>
+                    <tbody>
+                        <tr th:each="colheita : ${ultimasColheitas}">
+                            <td th:text="${colheita.data_colheita}"></td>
+                            <td th:text="${colheita.salina ?: '—'}"></td>
+                            <td th:text="${colheita.tanque_id ?: '—'}"></td>
+                            <td th:text="${colheita.quantidade_produzida == null ? '—' : colheita.quantidade_produzida + ' kg'}"></td>
+                            <td th:text="${colheita.trabalhador ?: '—'}"></td>
+                        </tr>
+                        <tr th:if="${ultimasColheitas.isEmpty()}"><td colspan="5">Sem colheitas registadas.</td></tr>
+                    </tbody>
+                </table>
+            </section>
+            <footer class="rodape"><span>SalAveiro · Gestão com raízes na tradição</span></footer>
+        </main>
+    </div>
+</body>
+</html>
